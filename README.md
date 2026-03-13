@@ -1,6 +1,6 @@
 # PyTrees Js
 
-[[About](#about)] [[Features](#features)] [[Preview](#preview)] [[Exmaple - Simple Web App](#example---simple-web-app)] [[Example - PyQt App](#example---pyqt-app)] [[The JSON Specification](#the-json-specification)]
+[[About](#about)] [[Features](#features)] [[Preview](#preview)] [[Exmaple - Simple Web App](#example---simple-web-app)] [[Example - PyQt App](#example---pyqt-app)] [[Runnable Examples](#runnable-examples)] [[The JSON Specification](#the-json-specification)]
 
 ## About
 
@@ -387,6 +387,71 @@ def send_tree(web_view_page, demo_trees, unused_checked):
 
 send_tree.index = 0
 ```
+
+## Runnable Examples
+
+If you want ready-to-run versions of the README examples, use the following.
+The Python setup below is **virtual-environment first**.
+
+### 0) Python virtual environment setup (required)
+
+```bash
+cd /workspace/py_trees_js
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
+
+Install this package plus PyQt dependencies:
+
+```bash
+pip install -e .
+pip install PyQt5 PyQtWebEngine
+```
+
+> Notes:
+>
+> * On Linux, PyQtWebEngine may require extra system libs (OpenGL/X11 stack).
+> * If you run on a headless server, prefer the web example unless you already have GUI forwarding configured.
+
+### 1) Web example
+
+Start a local static server:
+
+```bash
+cd /workspace/py_trees_js
+source .venv/bin/activate
+python -m http.server 8000
+```
+
+Then open:
+
+* <http://localhost:8000/examples/web/index.html>
+
+Expected result:
+
+* A page with a small toolbar (`Render demo tree`) on top and a tree + timeline view below.
+* The first demo tree is rendered automatically.
+* Clicking the button again appends another event to the timeline and updates the status text with the latest timestamp.
+
+### 2) PyQt example (if PyQt5 + QtWebEngine are available)
+
+In another terminal:
+
+```bash
+cd /workspace/py_trees_js
+source .venv/bin/activate
+python examples/pyqt/standalone_viewer.py
+```
+
+Expected result:
+
+* A desktop window titled `PyTrees JS - PyQt Example` opens.
+* The top button (`Send tree to web view`) manually pushes one tree snapshot.
+* The embedded web view auto-updates roughly every 1.5s (tree state alternates), and the timeline keeps accumulating events.
+
+This example embeds `examples/pyqt/index.html` inside `QWebEngineView` and periodically
+sends JSON trees from python to javascript via `runJavaScript("render_tree(...)")`.
 
 ## The JSON Specification
 
